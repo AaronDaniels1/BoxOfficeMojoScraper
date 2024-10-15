@@ -7,6 +7,7 @@ import datetime
 
 import smtplib
 import uuid
+from concurrent.futures import ThreadPoolExecutor
 
 # Connect to website
 
@@ -15,7 +16,7 @@ base_url = "https://www.boxofficemojo.com/date/"
 headers = {'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36'}
 
 # Start and end dates for scraping
-start_date = datetime.datetime(2024, 10, 1)
+start_date = datetime.datetime(1977, 5, 1)
 end_date = datetime.datetime.now() - datetime.timedelta(days=3)  # Five days ago from today
 
 def get_daily_box_office_totals(url):
@@ -50,6 +51,16 @@ def get_daily_box_office_totals(url):
 
 # List to hold all data
 all_data = []
+headers = None
+
+"""with ThreadPoolExecutor(max_workers=10) as executor:
+    dates = [start_date + datetime.timedelta(days=i) for i in range((end_date - start_date).days + 1)]
+    results = list(executor.map(get_daily_box_office_totals, dates))
+
+for result in results:
+    if result:
+        headers, rows = result
+        all_data.extend(rows)"""
 
 # Loop through each date in the range and scrape data
 current_date = start_date
@@ -67,7 +78,7 @@ while current_date <= end_date:
         for row in rows:
             row.insert(0, formatted_date)  # Insert date as the first column
         all_data.extend(rows)
-    current_date += datetime.timedelta(days=1) 
+    current_date += datetime.timedelta(days=1)
 
     # Save to Excel
 if all_data:
