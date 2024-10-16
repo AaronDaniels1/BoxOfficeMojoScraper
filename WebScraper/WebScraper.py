@@ -16,7 +16,7 @@ base_url = "https://www.boxofficemojo.com/date/"
 headers = {'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36'}
 
 # Start and end dates for scraping
-start_date = datetime.datetime(1977, 5, 1)
+start_date = datetime.datetime(1994, 1, 1)
 end_date = datetime.datetime.now() - datetime.timedelta(days=3)  # Five days ago from today
 
 def get_daily_box_office_totals(url):
